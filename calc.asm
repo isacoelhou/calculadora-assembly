@@ -1,15 +1,20 @@
 extern printf
 extern scanf
+extern fopen
+extern fclose
 
 section .data
     ola: db "Equação :", 10, 0
     erro: db "funcionalidade não disponível", 10
     vart: db "%f %c %f", 0
+    modo: "a", 0
+    nomearq: db "respostas.txt", 0
 
 section .bss
+    arq: resd 1 
     op1: resd 1
-    op: resb 2  
     op2: resd 1
+    op: resb 2  
 
 section .text
     global main
@@ -36,6 +41,18 @@ exp:
 
 
 arquivo:
+    ;abre o arquivo
+    lea rsi, [modo]
+    lea rdi, [nome]
+    call fopen
+
+    mov [arq], eax 
+
+    ;fecha
+    lea rdi, [nome]
+    call fclose
+
+    jmp fim
 
 main:
     push rbp
