@@ -19,27 +19,6 @@ section .bss
 section .text
     global main
 
-soma:
-
-    jmp arquivo
-
-menos:
-
-    jmp arquivo
-
-mult:
-
-    jmp arquivo
-
-divide:
-
-    jmp arquivo
-
-exp:
-
-    jmp arquivo
-
-
 arquivo:
     ;abre o arquivo
     lea rsi, [modo]
@@ -51,7 +30,13 @@ arquivo:
     ;fecha
     lea rdi, [nome]
     call fclose
+    jmp fim
 
+erro:
+    xor rax, rax
+    mov rdi, erro
+    mov esi, 1
+    call printf
     jmp fim
 
 main:
@@ -77,19 +62,19 @@ main:
 
     ;compara com as opções
     cmp r8b, 's'
-    je menos
+    je menos ; ta errado, tem que fazer funções não labels
 
     cmp r8b, 'a'
-    je soma
+    je soma ; ta errado, tem que fazer funções não labels
 
     cmp r8b, 'm'
-    je mult
+    je mult ; ta errado, tem que fazer funções não labels
 
     cmp r8b, 'd'
-    je divide
+    je divide ; ta errado, tem que fazer funções não labels
 
     cmp r8b, 'e'
-    je exp
+    je exp ; ta errado, tem que fazer funções não labels
 
 fim:
     mov rax, 60  
