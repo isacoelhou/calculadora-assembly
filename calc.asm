@@ -19,6 +19,19 @@ section .bss
 section .text
     global main
 
+soma:
+    mov xmm0, op1
+    mov xmm1, op2
+    addss xmm0, xmm1  ; Adicionar xmm1 a xmm0
+    ret
+
+menos:
+    mov xmm0, op1
+    mov xmm1, op2
+    subss xmm0, xmm1 
+    ret
+
+
 arquivo:
     ;abre o arquivo
     lea rsi, [modo]
@@ -38,6 +51,7 @@ erro:
     mov esi, 1
     call printf
     jmp fim
+
 
 main:
     push rbp
@@ -62,19 +76,28 @@ main:
 
     ;compara com as opções
     cmp r8b, 's'
-    je menos ; ta errado, tem que fazer funções não labels
+    call menos ; ta errado, tem que fazer funções não labels
+    jmp arquivo 
+
 
     cmp r8b, 'a'
-    je soma ; ta errado, tem que fazer funções não labels
+    call soma
+    jmp arquivo 
 
     cmp r8b, 'm'
-    je mult ; ta errado, tem que fazer funções não labels
+    call mult ; ta errado, tem que fazer funções não labels
+    jmp arquivo 
+
 
     cmp r8b, 'd'
-    je divide ; ta errado, tem que fazer funções não labels
+    call divide ; ta errado, tem que fazer funções não labels
+    jmp arquivo 
+
 
     cmp r8b, 'e'
-    je exp ; ta errado, tem que fazer funções não labels
+    call exp ; ta errado, tem que fazer funções não labels
+    jmp arquivo 
+
 
 fim:
     mov rax, 60  
