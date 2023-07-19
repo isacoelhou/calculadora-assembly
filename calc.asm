@@ -4,6 +4,10 @@ extern fopen
 extern fclose
 ; nasm -f elf64 calc.asm ; gcc -m64 -no-pie calc.o -o calc.x
 
+; multiplicalção e divisão por negativo fdiv, fmul?
+; verificar call de função e retorno
+; escrita em arquivo
+
 section .data
     ola: db "Equação :", 10, 0
     erro: db "funcionalidade não disponível", 10
@@ -42,9 +46,38 @@ k:
 divide:
     movss xmm0, dword[op1]   
     movss xmm1, dword[op2]  
+    cmp xmm1, 0
+    je erro
+
     divss xmm0, xmm1 
-y:
     ret
+
+exp: 
+    movss xmm0, dword[op1]   
+    movss xmm1, dword[op2] 
+    movss xmm2, dword[op1]
+
+    cmp xmm1, 0
+    jb erro
+        
+    ; if op2 == 0 return 1 
+    ; se op2 = 0 ret 1 
+    cmp xmm1, 0
+        ret 1
+    
+    cmp xmm1, 1
+        ret xmm0
+
+
+    conta:
+        mov r12, 2 
+        mulss xmm0, xmm2
+        cmp xmm1, r12
+        jb conta
+        
+    e:
+        ret
+
 
 arquivo:
     ;abre o arquivo
@@ -52,8 +85,7 @@ arquivo:
     lea rdi, [nomearq]
     call fopen
 
-    mov [arq], eax 
-
+  
     ;fecha
     lea rdi, [nomearq]
     call fclose
@@ -89,27 +121,24 @@ main:
     mov r8b, [op]
     ;compara com as opções
     cmp r8b, 's' 
-    call menos 
-    jmp fim 
-
+    je menos 
+    jmp arquivo
 
     cmp r8b, 'a'
-    call soma
-    jmp fim 
+    je soma
+    jmp arquivo
 
     cmp r8b, 'm'
-    call mult 
-    jmp fim 
-
+    je mult 
+    jmp arquivo
 
     cmp r8b, 'd'
-    call divide 
-    jmp fim 
+    je divide 
+    jmp arquivo
 
-
-    ;cmp r8b, 'e'
-    ;call exp 
-    ;jmp arquivo 
+    cmp r8b, 'e'
+    je exp 
+    jmp arquivo 
 
 
 fim:
